@@ -27,19 +27,19 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "djoser",
-    "corsheaders",
+    # "corsheaders",
     "posts",
     "users",
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    # "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -80,6 +80,7 @@ EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -98,6 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated"
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -117,7 +121,12 @@ DJOSER = {
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    "SERIALIZERS": {},
+    "SERIALIZERS": {
+        "user_create": "users.serializers.UserCreateSerializer",
+        "user": "users.serializers.UserCreateSerializer",
+        "current_user": "users.serializers.UserCreateSerializer",
+        "user_delete": "djoser.serializers.UserDeleteSerializer",
+    },
 }
 
 
