@@ -1,13 +1,13 @@
 from django.contrib import admin
-from . import models
+from posts.models import Post, Tag
 
 
-@admin.register(models.Post)
+@admin.register(Post)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('title', 'id', 'published', 'slug', 'author')
+    list_display = ('title', 'id', 'published', 'slug', 'author_id')
     prepopulated_fields = {
         'slug': ('title', ),
     }
 
 
-admin.site.register(models.Category)
+admin.site.register(Tag)
