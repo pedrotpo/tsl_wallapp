@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
 import { Form, Field } from 'react-final-form'
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
-import api from 'commons/api'
 
-const Login = () => {
+import api from 'commons/api'
+//TODO Create Post Component
+const Register = () => {
   const [show, setShow] = useState(false)
   const handleShowPassword = () => setShow(!show)
+
   const onSubmit = async (values: any) => {
-    const { user_id } = await api.auth.login({
+    /* const response = await api.posts.createPosts({
       email: values.email,
+      first_name: values.first_name,
+      last_name: values.last_name,
       password: values.password
     })
-    const token = localStorage.getItem('access_token')
-    await api.users.updateUser(user_id, {
-      email: 'rob@tsl.com',
-      first_name: 'Rob',
-      last_name: 'teste',
-      password: 'teste123'
-    })
-    const response = await api.users.getUser(user_id)
-    console.log(response)
+    console.log(response) */
+    window.alert(JSON.stringify(values))
   }
   return (
     <Form
@@ -30,7 +27,27 @@ const Login = () => {
             name="email"
             render={({ input, meta }) => (
               <div>
-                <label>Bio</label>
+                <label>Email</label>
+                <Input {...input} />
+                {meta.touched && meta.error && <span>{meta.error}</span>}
+              </div>
+            )}
+          />
+          <Field
+            name="first_name"
+            render={({ input, meta }) => (
+              <div>
+                <label>First</label>
+                <Input {...input} />
+                {meta.touched && meta.error && <span>{meta.error}</span>}
+              </div>
+            )}
+          />
+          <Field
+            name="last_name"
+            render={({ input, meta }) => (
+              <div>
+                <label>Last</label>
                 <Input {...input} />
                 {meta.touched && meta.error && <span>{meta.error}</span>}
               </div>
@@ -61,4 +78,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register
