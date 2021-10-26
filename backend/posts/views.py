@@ -15,7 +15,7 @@ class PostUserPermissions(BasePermission):
         return obj.author_id == request.user
 
 
-class PostsList(generics.ListCreateAPIView):
+class PostsListCreate(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -26,6 +26,6 @@ class PostsDetail(generics.RetrieveUpdateDestroyAPIView, PostUserPermissions):
     serializer_class = PostSerializer
 
 
-class TagsList(generics.ListCreateAPIView):
+class TagsListCreate(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer

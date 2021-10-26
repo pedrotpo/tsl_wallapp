@@ -1,36 +1,28 @@
-from django.contrib.auth import get_user_model
-from rest_framework import generics, status, views
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import AllowAny
+from rest_framework import generics
+from rest_framework.permissions import (SAFE_METHODS, AllowAny, BasePermission)
 from users.models import CustomUser
 from .serializers import CustomUserSerializer
 
-User = get_user_model()
+
+class EditUserPermissions(BasePermission):
+
+    message = "Only the author of this post can edit or delete"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+
+        return obj == request.user
 
 
 # Create your views here.
-class UserList(generics.ListAPIView):
+class UserListCreate(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
 
 
-class UserCreate(generics.CreateAPIView):
+class UserDetail(generics.RetrieveUpdateDestroyAPIView, EditUserPermissions):
     queryset = CustomUser.objects.all()
+    permission_classes = [EditUserPermissions]
     serializer_class = CustomUserSerializer
-    permission_classes = [AllowAny]
-
-
-class BlacklistTokenUpdateView(views.APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = ()
-
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)

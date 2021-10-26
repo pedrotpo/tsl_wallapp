@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import PostsList, PostsDetail, TagsList
+from .views import PostsListCreate, PostsDetail, TagsListCreate
 
 app_name = 'posts'
 
 urlpatterns = [
-    path('posts/<int:pk>/', PostsDetail.as_view(), name='postsdetailcreate'),
-    path('posts/', PostsList.as_view(), name='postslistcreate'),
-    path('tags/', TagsList.as_view(), name='tagslistcreate'),
+    path('posts/', PostsListCreate.as_view(), name='postslistcreate'),
+    path('posts/<int:pk>/', PostsDetail.as_view(), name='postsdetail'),
+    path('tags/', TagsListCreate.as_view(), name='tagslistcreate'),
 ]

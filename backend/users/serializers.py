@@ -5,12 +5,13 @@ from users.models import CustomUser
 class CustomUserSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(required=True)
-    username = serializers.CharField(required=True)
+    first_name = serializers.CharField(max_length=255)
+    last_name = serializers.CharField(max_length=255)
     password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'first_name', 'last_name', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
