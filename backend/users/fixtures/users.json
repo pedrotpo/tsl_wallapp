@@ -1,0 +1,22 @@
+[
+  {
+    "model": "users.CustomUser",
+    "pk": 1,
+    "fields": {
+      "email": "rob@tsl.com",
+      "first_name": "Rob",
+      "last_name": "Doischen",
+      "password": "tsl12345"
+    }
+  },
+  {
+    "model": "users.CustomUser",
+    "pk": 2,
+    "fields": {
+      "email": "dave@tsl.com",
+      "first_name": "Dave",
+      "last_name": "Hartmann",
+      "password": "tsl12345"
+    }
+  }
+]

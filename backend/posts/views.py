@@ -1,6 +1,6 @@
 from rest_framework import generics
-from posts.models import Post, Tag
-from .serializers import PostSerializer, TagSerializer
+from posts.models import Post
+from .serializers import PostSerializer
 from rest_framework.permissions import (SAFE_METHODS, BasePermission)
 
 
@@ -24,8 +24,3 @@ class PostsDetail(generics.RetrieveUpdateDestroyAPIView, PostUserPermissions):
     permission_classes = [PostUserPermissions]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-
-class TagsListCreate(generics.ListCreateAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
