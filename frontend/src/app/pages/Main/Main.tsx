@@ -1,16 +1,23 @@
 import React, { useEffect } from 'react'
-import { useAppDispatch } from 'commons/hooks'
-import { loadPosts } from 'commons/ducks/posts'
+import { Grid, GridItem } from '@chakra-ui/react'
+import { useDucks } from 'commons/hooks'
 import PostsList from 'commons/components/PostsList'
 
 const Main = () => {
-  const dispatch = useAppDispatch()
+  const { loadPosts } = useDucks()
 
   useEffect(() => {
-    dispatch(loadPosts)
+    loadPosts()
   })
 
-  return <PostsList />
+  return (
+    <Grid>
+      <GridItem>Me</GridItem>
+      <GridItem>
+        <PostsList />
+      </GridItem>
+    </Grid>
+  )
 }
 
 export default Main

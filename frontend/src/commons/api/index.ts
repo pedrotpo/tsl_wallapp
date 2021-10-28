@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import jwt from 'jwt-decode'
-import { BaseUser, UserDetail, Decoded } from './types'
+import { BaseUser, UserDetail, Decoded } from 'commons/types'
 
 const apiPath = 'http://localhost:8000/api'
 
@@ -16,6 +16,7 @@ const axios = Axios.create({
   }
 })
 
+// Set an interceptor to handle specific error cases and treat accordingly
 axios.interceptors.response.use(
   (response) => {
     return response
@@ -24,17 +25,12 @@ axios.interceptors.response.use(
     const originalRequest = error.config
 
     if (typeof error.response === 'undefined') {
-      alert(
-        'A server/network error occurred. ' +
-          'Looks like CORS might be the problem. ' +
-          'Sorry about this - we will get it fixed shortly.'
-      )
       return Promise.reject(error)
     }
 
     if (
       error.response.status === 401 &&
-      originalRequest.url === apiPath + 'token/refresh/'
+      originalRequest.url === `${apiPath}/token/refresh/`
     ) {
       window.location.href = '/login/'
       return Promise.reject(error)
@@ -55,8 +51,8 @@ axios.interceptors.response.use(
           return axios
             .post('/token/refresh/', { refresh: refreshToken })
             .then((response: any) => {
+              //TODO Token Type
               localStorage.setItem('access_token', response.data.access)
-              localStorage.setItem('refresh_token', response.data.refresh)
 
               axios.defaults.headers.common[
                 'Authorization'
@@ -71,16 +67,15 @@ axios.interceptors.response.use(
               console.log(err)
             })
         } else {
-          console.log('Refresh token is expired', tokenParts.exp, now)
+          //If refresh token is expired, redirect to login screen
           window.location.href = '/login/'
         }
       } else {
-        console.log('Refresh token not available.')
+        //If no refresh token is set, redirect to login screen
         window.location.href = '/login/'
       }
     }
-
-    // specific error handling done elsewhere
+    //Other errors should be handled by the duck from which it was called
     return Promise.reject(error)
   }
 )
@@ -94,7 +89,7 @@ export default {
         axios.defaults.headers.common[
           'Authorization'
         ] = `JWT ${localStorage.getItem('access_token')}`
-        return jwt<Decoded>(res.data.access)
+        return res.data
       }),
     validation: (config: any) =>
       axios.post(`${apiPath}/auth/validation`, config),
@@ -109,9 +104,6 @@ export default {
   },
   posts: {
     getPosts: () => axios.get('/posts/'),
-    createPosts: (post: any, token: any) =>
-      axios.post('/posts/', post, {
-        headers: { Authorization: `JWT ${token}` }
-      })
+    createPosts: (post: any) => axios.post('/posts/', post)
   }
 }

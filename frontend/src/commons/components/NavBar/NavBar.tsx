@@ -22,6 +22,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon
 } from '@chakra-ui/icons'
+import { Link as RouterLink } from 'react-router-dom'
 import LoginForm from 'commons/components/LoginForm'
 
 const NavBar = () => {
@@ -63,10 +64,6 @@ const NavBar = () => {
           >
             Logo
           </Text>
-
-          <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-            Teste
-          </Flex>
         </Flex>
 
         <Stack
@@ -83,7 +80,6 @@ const NavBar = () => {
                 fontWeight={400}
                 color={'white'}
                 bg={'pink.400'}
-                href={'#'}
                 _hover={{
                   bg: 'pink.300'
                 }}
@@ -102,19 +98,17 @@ const NavBar = () => {
               <LoginForm />
             </PopoverContent>
           </Popover>
-
           <Button
             display={{ base: 'none', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
             bg={'pink.400'}
-            href={'#'}
             _hover={{
               bg: 'pink.300'
             }}
           >
-            Sign Up
+            <RouterLink to="/register">Sign Up</RouterLink>
           </Button>
         </Stack>
       </Flex>

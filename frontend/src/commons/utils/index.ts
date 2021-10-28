@@ -9,7 +9,7 @@ export const mustBeNumber = (value: number) =>
 export const minValue = (min: number) => (value: number) =>
   isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`
 export const composeValidators =
-  (...validators: Array<Function>) =>
+  (...validators: Array<any>) =>
   (value: any) =>
     validators.reduce(
       (error, validator) => error || validator(value),

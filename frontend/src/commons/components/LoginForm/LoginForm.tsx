@@ -7,19 +7,15 @@ import {
   InputGroup,
   InputRightElement
 } from '@chakra-ui/react'
-import api from 'commons/api'
+import { useDucks } from 'commons/hooks'
 
 const LoginForm = () => {
   const [show, setShow] = useState(false)
   const handleShowPassword = () => setShow(!show)
-  //TODO Insert ducks
+  const { logInUser, loadUserProfile } = useDucks()
   const onSubmit = async (values: any) => {
-    const { user_id } = await api.auth.login({
-      email: values.email,
-      password: values.password
-    })
-    const response = await api.users.getUser(user_id)
-    console.log(response)
+    const id = await logInUser(values)
+    await loadUserProfile(id)
   }
   return (
     <Form

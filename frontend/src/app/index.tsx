@@ -6,6 +6,7 @@ import Register from 'app/pages/Register'
 import LoginForm from 'commons/components/LoginForm'
 import NavBar from 'commons/components/NavBar'
 import Footer from 'commons/components/Footer'
+import PostForm from 'commons/components/PostForm/PostForm'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Switch>
           <Route path="/login" render={() => <LoginForm />} />
           <Route path="/register" render={() => <Register />} />
+          <Route path="/post" render={() => <PostForm />} />
           <Route path="/" render={() => <Main />} />
         </Switch>
 
