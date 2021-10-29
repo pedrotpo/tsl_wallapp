@@ -24,16 +24,6 @@ const PostForm = () => {
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
           <Field
-            name="title"
-            render={({ input, meta }) => (
-              <div>
-                <label>Title</label>
-                <Input {...input} />
-                {meta.touched && meta.error && <span>{meta.error}</span>}
-              </div>
-            )}
-          />
-          <Field
             name="content"
             render={({ input, meta }) => (
               <div>

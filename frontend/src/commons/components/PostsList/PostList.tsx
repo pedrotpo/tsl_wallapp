@@ -19,7 +19,7 @@ const PostsList = () => {
       {!state.loading &&
         state.data &&
         Object.values(state.data).map((item: any) => (
-          <div key={item.id}>{item.title}</div>
+          <div key={item.id}>{item.content}</div>
         ))}
       {lorem()}
     </Box>

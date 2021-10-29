@@ -3,17 +3,20 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 import api from 'commons/api'
 import type { RootState, AppDispatch, Decoded } from 'commons/types'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'commons/constants'
 
 import {
   logInUserStarted,
   logInUserSucceeded,
-  logInUserFailed
+  logInUserFailed,
+  logOutUser
 } from 'commons/ducks/auth'
 
 import {
   loadUserProfileStarted,
   loadUserProfileSucceeded,
-  loadUserProfileFailed
+  loadUserProfileFailed,
+  clearUser
 } from 'commons/ducks/user'
 
 import {
@@ -82,6 +85,12 @@ export const useDucks = () => {
         dispatch(logInUserFailed(error.message))
         Promise.reject(error)
       }
+    },
+    logOutUser: () => {
+      localStorage.removeItem(ACCESS_TOKEN)
+      localStorage.removeItem(REFRESH_TOKEN)
+      dispatch(logOutUser())
+      dispatch(clearUser())
     },
     createPosts: async (value: any) => {
       dispatch(createPostsStarted(value))

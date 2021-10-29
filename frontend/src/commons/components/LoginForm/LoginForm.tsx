@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router'
 import { Form, Field } from 'react-final-form'
 import {
   Box,
@@ -12,10 +13,12 @@ import { useDucks } from 'commons/hooks'
 const LoginForm = () => {
   const [show, setShow] = useState(false)
   const handleShowPassword = () => setShow(!show)
+  const history = useHistory()
   const { logInUser, loadUserProfile } = useDucks()
   const onSubmit = async (values: any) => {
     const id = await logInUser(values)
     await loadUserProfile(id)
+    history.push('/')
   }
   return (
     <Form

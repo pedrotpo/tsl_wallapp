@@ -1,40 +1,106 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
+import { Link as RouterLink } from 'react-router-dom'
 import {
   Box,
   Flex,
-  Text,
   IconButton,
+  Image,
   Button,
   Stack,
+  StackDivider,
   Collapse,
-  Icon,
-  Link,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   useColorModeValue,
-  useBreakpointValue,
   useDisclosure
 } from '@chakra-ui/react'
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ChevronDownIcon,
-  ChevronRightIcon
-} from '@chakra-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
-import LoginForm from 'commons/components/LoginForm'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
+import { useAppSelector, useDucks } from 'commons/hooks'
+import imgURL from '../../../public/logo.png'
 
 const NavBar = () => {
-  const { isOpen, onToggle } = useDisclosure()
-  const popoverContentBgColor = useColorModeValue('white', 'gray.800')
+  const { isOpen, onToggle, onClose } = useDisclosure()
+  const currentUser = useAppSelector((state) => state.user.data)
+  const userProfileIsLoaded = useAppSelector((state) => state.user.loaded)
+  const history = useHistory()
+  const { logOutUser } = useDucks()
+
+  const renderButtons = (mobile = false) => {
+    const handleClick = (url: string) => {
+      if (url === '/logout') logOutUser()
+      url === '/logout' ? history.push('/') : history.push(url)
+      if (mobile) onClose()
+    }
+
+    let base = 'none'
+    let md = 'inline-flex'
+
+    if (mobile) {
+      base = 'inline-flex'
+      md = 'none'
+    }
+
+    if (
+      (!currentUser || Object.keys(currentUser).length === 0) &&
+      !userProfileIsLoaded
+    )
+      return (
+        <>
+          <Button
+            display={{ base: base, md: md }}
+            fontSize={'sm'}
+            fontWeight={400}
+            color={'white'}
+            bg={'pink.400'}
+            onClick={() => handleClick('/login')}
+            _hover={{
+              bg: 'pink.300'
+            }}
+          >
+            Sign In
+          </Button>
+          <Button
+            display={{ base: base, md: md }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            onClick={() => handleClick('/register')}
+            _hover={{
+              bg: 'pink.300'
+            }}
+          >
+            Sign Up
+          </Button>
+        </>
+      )
+    if (
+      currentUser &&
+      Object.keys(currentUser).length !== 0 &&
+      userProfileIsLoaded
+    )
+      return (
+        <Button
+          display={{ base: base, md: md }}
+          fontSize={'sm'}
+          fontWeight={400}
+          color={'white'}
+          bg={'pink.400'}
+          onClick={() => handleClick('/logout')}
+          _hover={{
+            bg: 'pink.300'
+          }}
+        >
+          Logout
+        </Button>
+      )
+  }
 
   return (
-    <Box position={'fixed'} top={0} w="100%">
+    <Box position={'fixed'} top={0} w="100%" zIndex={1000}>
       <Flex
         bg={useColorModeValue('white', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
-        minH={'60px'}
+        h={'70px'}
         py={{ base: 2 }}
         px={{ base: 4 }}
         borderBottom={1}
@@ -43,12 +109,12 @@ const NavBar = () => {
         align={'center'}
       >
         <Flex
-          flex={{ base: 1, md: 'auto' }}
+          flex={{ base: 1 }}
           ml={{ base: -2 }}
           display={{ base: 'flex', md: 'none' }}
         >
           <IconButton
-            onClick={onToggle}
+            onClick={() => onToggle()}
             icon={
               isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
             }
@@ -57,267 +123,38 @@ const NavBar = () => {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-            fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}
-          >
-            Logo
-          </Text>
+          <RouterLink to="/">
+            <Image src={imgURL} boxSize="50px" alt="logo" />
+          </RouterLink>
         </Flex>
 
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
           direction={'row'}
+          align="center"
           spacing={6}
         >
-          <Popover trigger={'click'} placement={'bottom-start'}>
-            <PopoverTrigger>
-              <Button
-                display={{ base: 'none', md: 'inline-flex' }}
-                fontSize={'sm'}
-                fontWeight={400}
-                color={'white'}
-                bg={'pink.400'}
-                _hover={{
-                  bg: 'pink.300'
-                }}
-              >
-                Sign In
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              border={0}
-              boxShadow={'xl'}
-              bg={popoverContentBgColor}
-              p={4}
-              rounded={'xl'}
-              minW={'sm'}
-            >
-              <LoginForm />
-            </PopoverContent>
-          </Popover>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            _hover={{
-              bg: 'pink.300'
-            }}
-          >
-            <RouterLink to="/register">Sign Up</RouterLink>
-          </Button>
+          {renderButtons()}
         </Stack>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
-        <MobileNav />
+        <Stack
+          flex={{ base: 1, md: 0 }}
+          justify={'flex-end'}
+          direction={'column'}
+          align="flex-start"
+          spacing={6}
+          p={4}
+          boxShadow="base"
+          divider={<StackDivider borderColor="gray.200" />}
+          bg={useColorModeValue('white', 'gray.800')}
+        >
+          {renderButtons(true)}
+        </Stack>
       </Collapse>
     </Box>
   )
 }
-
-const DesktopNav = () => {
-  const linkColor = useColorModeValue('gray.600', 'gray.200')
-  const linkHoverColor = useColorModeValue('gray.800', 'white')
-  const popoverContentBgColor = useColorModeValue('white', 'gray.800')
-
-  return (
-    <Stack direction={'row'} spacing={4}>
-      {NAV_ITEMS.map((navItem) => (
-        <Box key={navItem.label}>
-          <Popover trigger={'click'} placement={'bottom-start'}>
-            <PopoverTrigger>
-              <Link
-                p={2}
-                href={navItem.href ?? '#'}
-                fontSize={'md'}
-                fontWeight={500}
-                color={linkColor}
-                _hover={{
-                  textDecoration: 'none',
-                  color: linkHoverColor
-                }}
-              >
-                {navItem.label}
-              </Link>
-            </PopoverTrigger>
-
-            {navItem.children && (
-              <PopoverContent
-                border={0}
-                boxShadow={'xl'}
-                bg={popoverContentBgColor}
-                p={4}
-                rounded={'xl'}
-                minW={'sm'}
-              >
-                <Stack>
-                  {navItem.children.map((child) => (
-                    <DesktopSubNav key={child.label} {...child} />
-                  ))}
-                </Stack>
-              </PopoverContent>
-            )}
-          </Popover>
-        </Box>
-      ))}
-    </Stack>
-  )
-}
-
-const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
-  return (
-    <Link
-      href={href}
-      role={'group'}
-      display={'block'}
-      p={2}
-      rounded={'md'}
-      _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}
-    >
-      <Stack direction={'row'} align={'center'}>
-        <Box>
-          <Text
-            transition={'all .3s ease'}
-            _groupHover={{ color: 'pink.400' }}
-            fontWeight={500}
-          >
-            {label}
-          </Text>
-          <Text fontSize={'sm'}>{subLabel}</Text>
-        </Box>
-        <Flex
-          transition={'all .3s ease'}
-          transform={'translateX(-10px)'}
-          opacity={0}
-          _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
-          justify={'flex-end'}
-          align={'center'}
-          flex={1}
-        >
-          <Icon color={'pink.400'} w={5} h={5} as={ChevronRightIcon} />
-        </Flex>
-      </Stack>
-    </Link>
-  )
-}
-
-const MobileNav = () => {
-  return (
-    <Stack
-      bg={useColorModeValue('white', 'gray.800')}
-      p={4}
-      display={{ md: 'none' }}
-    >
-      {NAV_ITEMS.map((navItem) => (
-        <MobileNavItem key={navItem.label} {...navItem} />
-      ))}
-    </Stack>
-  )
-}
-
-const MobileNavItem = ({ label, children, href }: NavItem) => {
-  const { isOpen, onToggle } = useDisclosure()
-
-  return (
-    <Stack spacing={4} onClick={children && onToggle}>
-      <Flex
-        py={2}
-        as={Link}
-        href={href ?? '#'}
-        justify={'space-between'}
-        align={'center'}
-        _hover={{
-          textDecoration: 'none'
-        }}
-      >
-        <Text
-          fontWeight={600}
-          color={useColorModeValue('gray.600', 'gray.200')}
-        >
-          {label}
-        </Text>
-        {children && (
-          <Icon
-            as={ChevronDownIcon}
-            transition={'all .25s ease-in-out'}
-            transform={isOpen ? 'rotate(180deg)' : ''}
-            w={6}
-            h={6}
-          />
-        )}
-      </Flex>
-
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
-        <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
-          borderStyle={'solid'}
-          borderColor={useColorModeValue('gray.200', 'gray.700')}
-          align={'start'}
-        >
-          {children &&
-            children.map((child) => (
-              <Link key={child.label} py={2} href={child.href}>
-                {child.label}
-              </Link>
-            ))}
-        </Stack>
-      </Collapse>
-    </Stack>
-  )
-}
-
-interface NavItem {
-  label: string
-  subLabel?: string
-  children?: Array<NavItem>
-  href?: string
-}
-
-const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: 'Inspiration',
-    children: [
-      {
-        label: 'Explore Design Work',
-        subLabel: 'Trending Design to inspire you',
-        href: '#'
-      },
-      {
-        label: 'New & Noteworthy',
-        subLabel: 'Up-and-coming Designers',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Find Work',
-    children: [
-      {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
-        href: '#'
-      },
-      {
-        label: 'Freelance Projects',
-        subLabel: 'An exclusive list for contract work',
-        href: '#'
-      }
-    ]
-  },
-  {
-    label: 'Learn Design',
-    href: '#'
-  },
-  {
-    label: 'Hire Designers',
-    href: '#'
-  }
-]
 export default NavBar

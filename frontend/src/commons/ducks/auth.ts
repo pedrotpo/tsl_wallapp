@@ -3,21 +3,26 @@ export const INITIAL_STATE = { loading: false, data: {}, error: null }
 export const DUCK_NAME = 'auth'
 
 // Actions
-export const LOG_IN_USER_STARTED = `${DUCK_NAME}/LOG_IN_USER_STARTED`
-export const LOG_IN_USER_SUCCEEDED = `${DUCK_NAME}/LOG_IN_USER_SUCCEEDED`
-export const LOG_IN_USER_FAILED = `${DUCK_NAME}/LOG_IN_USER_FAILED`
+export const LOGIN_USER_STARTED = `${DUCK_NAME}/LOGIN_USER_STARTED`
+export const LOGIN_USER_SUCCEEDED = `${DUCK_NAME}/LOGIN_USER_SUCCEEDED`
+export const LOGIN_USER_FAILED = `${DUCK_NAME}/LOGIN_USER_FAILED`
+export const LOGOUT_USER = `${DUCK_NAME}/LOGOUT_USER`
 
 // Action creators
 export const logInUserStarted = () => ({
-  type: LOG_IN_USER_STARTED
+  type: LOGIN_USER_STARTED
 })
 export const logInUserSucceeded = (data: any) => ({
   data,
-  type: LOG_IN_USER_SUCCEEDED
+  type: LOGIN_USER_SUCCEEDED
 })
 export const logInUserFailed = (error: any) => ({
   error,
-  type: LOG_IN_USER_FAILED
+  type: LOGIN_USER_FAILED
+})
+
+export const logOutUser = () => ({
+  type: LOGOUT_USER
 })
 
 // Reducer
@@ -28,23 +33,30 @@ export default (state = INITIAL_STATE, action: any) => {
   }
 
   switch (action.type) {
-    case LOG_IN_USER_STARTED:
+    case LOGIN_USER_STARTED:
       return {
         ...state,
         loading: true
       }
-    case LOG_IN_USER_SUCCEEDED:
+    case LOGIN_USER_SUCCEEDED:
       return {
         ...state,
         loading: false,
         error: null,
         data
       }
-    case LOG_IN_USER_FAILED:
+    case LOGIN_USER_FAILED:
       return {
         ...state,
         loading: false,
         error: action.error
+      }
+    case LOGOUT_USER:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        data: {}
       }
     default:
       return state
