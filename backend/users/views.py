@@ -1,5 +1,7 @@
 from rest_framework import generics
-from rest_framework.permissions import (SAFE_METHODS, AllowAny, BasePermission)
+from rest_framework.permissions import (
+    SAFE_METHODS, AllowAny, BasePermission, IsAuthenticated
+)
 from users.models import CustomUser
 from .serializers import CustomUserSerializer
 
@@ -12,7 +14,7 @@ class EditUserPermissions(BasePermission):
         if request.method in SAFE_METHODS:
             return True
 
-        return obj == request.user
+        return obj.id == request.user.id
 
 
 # Create your views here.
@@ -22,7 +24,7 @@ class UserListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView, EditUserPermissions):
+class UserDetail(generics.RetrieveUpdateAPIView, EditUserPermissions):
     queryset = CustomUser.objects.all()
-    permission_classes = [EditUserPermissions]
+    permission_classes = [IsAuthenticated & EditUserPermissions]
     serializer_class = CustomUserSerializer

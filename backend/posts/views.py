@@ -1,7 +1,9 @@
 from rest_framework import generics
+from rest_framework.permissions import (
+    SAFE_METHODS, BasePermission, IsAuthenticated
+)
 from posts.models import Post
 from .serializers import PostSerializer
-from rest_framework.permissions import (SAFE_METHODS, BasePermission)
 
 
 class PostUserPermissions(BasePermission):
@@ -20,7 +22,7 @@ class PostsListCreate(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
 
-class PostsDetail(generics.RetrieveUpdateDestroyAPIView, PostUserPermissions):
-    permission_classes = [PostUserPermissions]
+class PostsDetail(generics.RetrieveDestroyAPIView, PostUserPermissions):
+    permission_classes = [PostUserPermissions & IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
