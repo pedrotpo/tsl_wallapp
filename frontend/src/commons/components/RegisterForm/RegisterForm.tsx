@@ -10,17 +10,16 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: any) => {
     //TODO Insert ducks
-    const response = await api.users.createUser({
+    await api.users.createUser({
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
       password: values.password
     })
-    console.log(response)
-    window.alert(JSON.stringify(values))
   }
 
   return (
+    //TODO Clear Post Data
     <Form
       onSubmit={onSubmit}
       render={({ handleSubmit }) => (

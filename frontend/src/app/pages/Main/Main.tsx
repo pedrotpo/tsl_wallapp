@@ -12,8 +12,10 @@ const Main = () => {
   })
 
   return (
-    <Grid mx="auto" w="600px">
-      <GridItem><PostForm/></GridItem>
+    <Grid mx="auto" w="600px" templateRows="200px 1fr">
+      <GridItem pt={3}>
+        <PostForm />
+      </GridItem>
       <GridItem>
         <PostsList />
       </GridItem>

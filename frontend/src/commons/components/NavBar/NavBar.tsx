@@ -20,7 +20,6 @@ import imgURL from '../../../public/logo.png'
 const NavBar = () => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const currentUser = useAppSelector((state) => state.user.data)
-  const userProfileIsLoaded = useAppSelector((state) => state.user.loaded)
   const history = useHistory()
   const { logOutUser } = useDucks()
 
@@ -39,10 +38,7 @@ const NavBar = () => {
       md = 'none'
     }
 
-    if (
-      (!currentUser || Object.keys(currentUser).length === 0) &&
-      !userProfileIsLoaded
-    )
+    if (!currentUser || Object.keys(currentUser).length === 0)
       return (
         <>
           <Button
@@ -73,11 +69,7 @@ const NavBar = () => {
           </Button>
         </>
       )
-    if (
-      currentUser &&
-      Object.keys(currentUser).length !== 0 &&
-      userProfileIsLoaded
-    )
+    if (currentUser && Object.keys(currentUser).length !== 0)
       return (
         <Button
           display={{ base: base, md: md }}

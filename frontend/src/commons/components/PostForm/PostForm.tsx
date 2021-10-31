@@ -1,24 +1,20 @@
 import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { Button, Input } from '@chakra-ui/react'
-import jwt from 'jwt-decode'
 
-import { useDucks } from 'commons/hooks'
-import { Decoded } from 'commons/types'
+import { useAppSelector, useDucks } from 'commons/hooks'
 
 const PostForm = () => {
-  const { createPosts } = useDucks()
+  const { createPosts, loadPosts } = useDucks()
+  const userId = useAppSelector((state) => state.auth.data.user)
 
   const onSubmit = async (values: any) => {
-    const token = localStorage.getItem('access_token') || 'null'
-    const { user_id } = jwt<Decoded>(token)
-
-    createPosts({ ...values, author_id: user_id })
-    console.log(values)
-    window.alert(JSON.stringify(values))
+    await createPosts({ ...values, author_id: userId })
+    loadPosts()
   }
 
   return (
+    //TODO Clear Post Data
     <Form
       onSubmit={onSubmit}
       render={({ handleSubmit }) => (

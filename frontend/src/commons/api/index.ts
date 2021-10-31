@@ -1,16 +1,16 @@
 import Axios from 'axios'
 import jwt from 'jwt-decode'
 import { BaseUser, UserDetail, Decoded } from 'commons/types'
-import { 
-  API_URL, 
-  ACCESS_TOKEN, 
-  REFRESH_TOKEN, 
-  TOKEN_URL, 
+import {
+  API_URL,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+  TOKEN_URL,
   REFRESH_URL,
-  AUTH_URL, 
+  AUTH_URL,
   LOGIN_URL,
   USERS_URL,
-  POSTS_URL,
+  POSTS_URL
 } from 'commons/constants'
 
 const axios = Axios.create({
@@ -33,22 +33,13 @@ axios.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config
 
-    if (typeof error.response === 'undefined') {
-      return Promise.reject(error)
-    }
+    console.log(error.response)
 
     if (
-      error.response.status === 401 &&
-      originalRequest.url === `${API_URL}${REFRESH_URL}`
-    ) {
-      window.location.href = LOGIN_URL
-      return Promise.reject(error)
-    }
-
-    if (
-      error.response.data.code === 'token_not_valid' &&
-      error.response.status === 401 &&
-      error.response.statusText === 'Unauthorized'
+      (error.response.data.code === 'token_not_valid' &&
+        error.response.status === 401 &&
+        error.response.statusText === 'Unauthorized') ||
+      error.response.status === 403
     ) {
       const refreshToken = localStorage.getItem(REFRESH_TOKEN)
 
@@ -74,6 +65,7 @@ axios.interceptors.response.use(
             })
             .catch((err) => {
               console.log(err)
+              window.location.href = LOGIN_URL
             })
         } else {
           //If refresh token is expired, redirect to login screen
@@ -100,17 +92,16 @@ export default {
         ] = `JWT ${localStorage.getItem(ACCESS_TOKEN)}`
         return res.data
       }),
-    validation: (config: any) =>
-      axios.post(AUTH_URL, config),
+    validation: (config: any) => axios.post(AUTH_URL, config)
   },
   users: {
     createUser: (user: any) => axios.post(USERS_URL, user),
     getUser: (id: number) => axios.get(`${USERS_URL}${id}/`),
-    updateUser: (id: number, user: any) =>
-      axios.put(`${USERS_URL}${id}/`, user)
+    updateUser: (id: number, user: any) => axios.put(`${USERS_URL}${id}/`, user)
   },
   posts: {
     getPosts: () => axios.get(POSTS_URL),
-    createPosts: (post: any) => axios.post(POSTS_URL, post)
+    createPosts: (post: any) => axios.post(POSTS_URL, post),
+    deletePost: (id: any) => axios.delete(`${POSTS_URL}${id}/`)
   }
 }

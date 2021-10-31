@@ -20,9 +20,6 @@ import {
 } from 'commons/ducks/user'
 
 import {
-  createPostsStarted,
-  createPostsSucceeded,
-  createPostsFailed,
   loadPostsStarted,
   loadPostsSucceeded,
   loadPostsFailed
@@ -51,7 +48,6 @@ export const useDucks = () => {
       dispatch(loadUserProfileStarted())
       try {
         const { data } = await api.users.getUser(id)
-        console.log(data)
         dispatch(loadUserProfileSucceeded(data))
       } catch (error: any) {
         dispatch(loadUserProfileFailed(error.message))
@@ -65,7 +61,6 @@ export const useDucks = () => {
           email: values.email,
           password: values.password
         })
-        console.log(res)
         const access = jwt<Decoded>(res.access)
         const refresh = jwt<Decoded>(res.refresh)
         const decodedData = {
@@ -93,14 +88,18 @@ export const useDucks = () => {
       dispatch(clearUser())
     },
     createPosts: async (value: any) => {
-      dispatch(createPostsStarted(value))
       try {
         const res = await api.posts.createPosts(value)
-        dispatch(createPostsSucceeded())
         Promise.resolve(res)
       } catch (error: any) {
-        console.log(error)
-        dispatch(createPostsFailed(error.message))
+        Promise.reject(error)
+      }
+    },
+    deletePost: async (id: any) => {
+      try {
+        const res = await api.posts.deletePost(id)
+        Promise.resolve(res)
+      } catch (error: any) {
         Promise.reject(error)
       }
     }

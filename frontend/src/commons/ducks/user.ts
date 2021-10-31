@@ -1,4 +1,4 @@
-export const INITIAL_STATE = { loaded: false, data: null, error: null }
+export const INITIAL_STATE = { loaded: false, data: {}, error: null }
 
 export const DUCK_NAME = 'user'
 

@@ -1,9 +1,9 @@
 export const API_URL = 'http://localhost:8000/api'
-export const ACCESS_TOKEN = "tsl_access_token"
-export const REFRESH_TOKEN = "tsl_refresh_token"
-export const TOKEN_URL = "/token/"
-export const REFRESH_URL = "/token/refresh/"
-export const AUTH_URL = "/auth/validation"
-export const LOGIN_URL = "/login/"
-export const USERS_URL = "/users/"
-export const POSTS_URL = "/posts/"
+export const ACCESS_TOKEN = 'tsl_access_token'
+export const REFRESH_TOKEN = 'tsl_refresh_token'
+export const TOKEN_URL = '/token/'
+export const REFRESH_URL = '/token/refresh/'
+export const AUTH_URL = '/auth/validation'
+export const LOGIN_URL = '/login/'
+export const USERS_URL = '/users/'
+export const POSTS_URL = '/posts/'
