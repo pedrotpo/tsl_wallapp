@@ -1,13 +1,18 @@
 import Axios from 'axios'
 import jwt from 'jwt-decode'
-import { BaseUser, UserDetail, Decoded } from 'commons/types'
+import {
+  BaseUser,
+  UserDetail,
+  DecodedJWT,
+  JWTToken,
+  BasePost
+} from 'commons/types'
 import {
   API_URL,
   ACCESS_TOKEN,
   REFRESH_TOKEN,
   TOKEN_URL,
   REFRESH_URL,
-  AUTH_URL,
   LOGIN_URL,
   USERS_URL,
   POSTS_URL
@@ -44,13 +49,13 @@ axios.interceptors.response.use(
       const refreshToken = localStorage.getItem(REFRESH_TOKEN)
 
       if (refreshToken) {
-        const tokenParts = jwt<Decoded>(refreshToken)
+        const tokenParts = jwt<DecodedJWT>(refreshToken)
         const now = Math.ceil(Date.now() / 1000)
 
         if (tokenParts.exp > now) {
           return axios
-            .post(REFRESH_URL, { refresh: refreshToken })
-            .then((response: any) => {
+            .post<JWTToken>(REFRESH_URL, { refresh: refreshToken })
+            .then((response) => {
               //TODO Token Type
               localStorage.setItem(ACCESS_TOKEN, response.data.access)
 
@@ -63,8 +68,7 @@ axios.interceptors.response.use(
 
               return axios(originalRequest)
             })
-            .catch((err) => {
-              console.log(err)
+            .catch(() => {
               window.location.href = LOGIN_URL
             })
         } else {
@@ -84,24 +88,25 @@ axios.interceptors.response.use(
 export default {
   auth: {
     login: (user: BaseUser) =>
-      axios.post(TOKEN_URL, user).then((res: any) => {
+      axios.post<JWTToken>(TOKEN_URL, user).then((res) => {
         localStorage.setItem(ACCESS_TOKEN, res.data.access)
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
+        console.log(res)
         axios.defaults.headers.common[
           'Authorization'
-        ] = `JWT ${localStorage.getItem(ACCESS_TOKEN)}`
+        ] = `JWT ${res.data.access}`
         return res.data
-      }),
-    validation: (config: any) => axios.post(AUTH_URL, config)
+      })
   },
   users: {
-    createUser: (user: any) => axios.post(USERS_URL, user),
+    createUser: (user: UserDetail) => axios.post(USERS_URL, user),
     getUser: (id: number) => axios.get(`${USERS_URL}${id}/`),
-    updateUser: (id: number, user: any) => axios.put(`${USERS_URL}${id}/`, user)
+    updateUser: (id: number, user: UserDetail) =>
+      axios.put(`${USERS_URL}${id}/`, user)
   },
   posts: {
     getPosts: () => axios.get(POSTS_URL),
-    createPosts: (post: any) => axios.post(POSTS_URL, post),
-    deletePost: (id: any) => axios.delete(`${POSTS_URL}${id}/`)
+    createPosts: (post: BasePost) => axios.post(POSTS_URL, post),
+    deletePost: (id: number) => axios.delete(`${POSTS_URL}${id}/`)
   }
 }

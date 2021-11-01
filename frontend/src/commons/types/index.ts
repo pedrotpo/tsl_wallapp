@@ -13,10 +13,20 @@ export interface UserDetail extends BaseUser {
   last_name: string
 }
 
-export interface Decoded {
+export interface DecodedJWT {
   exp: number
   iat: number
   jti: string
   token_type: string
   user_id: number
+}
+
+export interface JWTToken {
+  access: string
+  refresh: string
+}
+
+export interface BasePost {
+  content: string
+  author_id: number
 }

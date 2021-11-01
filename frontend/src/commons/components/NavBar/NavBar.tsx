@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router'
 import { Link as RouterLink } from 'react-router-dom'
 import {
@@ -8,9 +8,9 @@ import {
   Image,
   Button,
   Stack,
+  Text,
   StackDivider,
   Collapse,
-  useColorModeValue,
   useDisclosure
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
@@ -25,8 +25,8 @@ const NavBar = () => {
 
   const renderButtons = (mobile = false) => {
     const handleClick = (url: string) => {
-      if (url === '/logout') logOutUser()
-      url === '/logout' ? history.push('/') : history.push(url)
+      if (url === '/logout/') logOutUser()
+      url === '/logout/' ? history.push('/') : history.push(url)
       if (mobile) onClose()
     }
 
@@ -43,27 +43,14 @@ const NavBar = () => {
         <>
           <Button
             display={{ base: base, md: md }}
-            fontSize={'sm'}
-            fontWeight={400}
-            color={'white'}
-            bg={'pink.400'}
-            onClick={() => handleClick('/login')}
-            _hover={{
-              bg: 'pink.300'
-            }}
+            onClick={() => handleClick('/login/')}
           >
             Sign In
           </Button>
           <Button
             display={{ base: base, md: md }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            onClick={() => handleClick('/register')}
-            _hover={{
-              bg: 'pink.300'
-            }}
+            variant="solid"
+            onClick={() => handleClick('/register/')}
           >
             Sign Up
           </Button>
@@ -71,40 +58,44 @@ const NavBar = () => {
       )
     if (currentUser && Object.keys(currentUser).length !== 0)
       return (
-        <Button
-          display={{ base: base, md: md }}
-          fontSize={'sm'}
-          fontWeight={400}
-          color={'white'}
-          bg={'pink.400'}
-          onClick={() => handleClick('/logout')}
-          _hover={{
-            bg: 'pink.300'
-          }}
+        <Flex
+          w="300px"
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          Logout
-        </Button>
+          {!mobile && (
+            <Text
+              minW="150px"
+              textAlign="center"
+            >{`Hello ${currentUser.first_name}!`}</Text>
+          )}
+          <Button
+            display={{ base: base, md: md }}
+            alignSelf="flex-end"
+            onClick={() => handleClick('/logout/')}
+          >
+            Logout
+          </Button>
+        </Flex>
       )
   }
 
   return (
     <Box position={'fixed'} top={0} w="100%" zIndex={1000}>
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
-        color={useColorModeValue('gray.600', 'white')}
+        bg="brandblue.500"
+        color="brandaqua.500"
         h={'70px'}
         py={{ base: 2 }}
         px={{ base: 4 }}
-        borderBottom={1}
+        borderBottom={2}
         borderStyle={'solid'}
-        borderColor={useColorModeValue('gray.200', 'gray.900')}
+        borderBottomColor="brandpurple.500"
         align={'center'}
+        justifyContent="space-between"
       >
-        <Flex
-          flex={{ base: 1 }}
-          ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}
-        >
+        <Flex ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
           <IconButton
             onClick={() => onToggle()}
             icon={
@@ -114,11 +105,20 @@ const NavBar = () => {
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+        <Flex
+          w="300px"
+          display={{ base: 'none', md: 'inline-flex' }}
+          justify={{ base: 'center', md: 'start' }}
+        >
           <RouterLink to="/">
             <Image src={imgURL} boxSize="50px" alt="logo" />
           </RouterLink>
         </Flex>
+        <Box flex={1} textAlign="center" maxW="680px">
+          <Text as="span" fontStyle="italic" fontWeight="700" fontSize="3xl">
+            THE WALL
+          </Text>
+        </Box>
 
         <Stack
           flex={{ base: 1, md: 0 }}
@@ -140,8 +140,8 @@ const NavBar = () => {
           spacing={6}
           p={4}
           boxShadow="base"
-          divider={<StackDivider borderColor="gray.200" />}
-          bg={useColorModeValue('white', 'gray.800')}
+          divider={<StackDivider borderColor="brandpurple.500" />}
+          bg="brandblue.500"
         >
           {renderButtons(true)}
         </Stack>

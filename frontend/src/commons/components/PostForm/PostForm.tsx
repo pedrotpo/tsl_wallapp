@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Field } from 'react-final-form'
-import { Button, Input } from '@chakra-ui/react'
+import { Button, Textarea, Box } from '@chakra-ui/react'
 
 import { useAppSelector, useDucks } from 'commons/hooks'
 
@@ -22,14 +22,17 @@ const PostForm = () => {
           <Field
             name="content"
             render={({ input, meta }) => (
-              <div>
-                <label>Content</label>
-                <Input {...input} />
+              <Box>
+                <Textarea placeholder="Speak your mind!" {...input} />
                 {meta.touched && meta.error && <span>{meta.error}</span>}
-              </div>
+              </Box>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Box display="flex" justifyContent="flex-end">
+            <Button type="submit" mt="20px" variant="solid">
+              Submit
+            </Button>
+          </Box>
         </form>
       )}
     />

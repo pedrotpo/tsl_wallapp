@@ -6,7 +6,8 @@ import {
   Button,
   Input,
   InputGroup,
-  InputRightElement
+  InputRightElement,
+  FormLabel
 } from '@chakra-ui/react'
 import { useDucks } from 'commons/hooks'
 
@@ -22,6 +23,7 @@ const LoginForm = () => {
   }
   return (
     //TODO Clear Post Data
+    //TODO Add Validators
     <Form
       onSubmit={onSubmit}
       render={({ handleSubmit }) => (
@@ -30,7 +32,7 @@ const LoginForm = () => {
             name="email"
             render={({ input, meta }) => (
               <Box>
-                <label>Email</label>
+                <FormLabel>Email</FormLabel>
                 <Input {...input} />
                 {meta.touched && meta.error && <span>{meta.error}</span>}
               </Box>
@@ -39,8 +41,8 @@ const LoginForm = () => {
           <Field
             name="password"
             render={({ input, meta }) => (
-              <Box mt={3} mb={5}>
-                <label>Password</label>
+              <Box mt="20px">
+                <FormLabel>Password</FormLabel>
                 <InputGroup size="md">
                   <Input
                     {...input}
@@ -49,7 +51,12 @@ const LoginForm = () => {
                     placeholder="Enter password"
                   />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleShowPassword}>
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      mr="10px"
+                      onClick={handleShowPassword}
+                    >
                       {show ? 'Hide' : 'Show'}
                     </Button>
                   </InputRightElement>
@@ -58,7 +65,11 @@ const LoginForm = () => {
               </Box>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Box display="flex" justifyContent="flex-end">
+            <Button type="submit" mt="20px" variant="solid">
+              Submit
+            </Button>
+          </Box>
         </form>
       )}
     />

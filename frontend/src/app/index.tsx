@@ -41,14 +41,14 @@ const App = () => {
   }, [userState, authToken, loadUserProfile, dispatch, refreshToken])
   return (
     <Router>
-      <Grid templateRows="70px 1fr 100px" height="100vh">
+      <Grid templateRows="70px 1fr 70px" height="100vh">
         <GridItem>
           <NavBar />
         </GridItem>
 
         <Switch>
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/register" render={() => <Register />} />
+          <Route path="/login/" render={() => <Login />} />
+          <Route path="/register/" render={() => <Register />} />
           <Route path="/" render={() => <Main />} />
         </Switch>
 
