@@ -5,7 +5,8 @@ import {
   UserDetail,
   DecodedJWT,
   JWTToken,
-  BasePost
+  BasePost,
+  PostDetail
 } from 'commons/types'
 import {
   API_URL,
@@ -105,7 +106,7 @@ export default {
       axios.put(`${USERS_URL}${id}/`, user)
   },
   posts: {
-    getPosts: () => axios.get(POSTS_URL),
+    getPosts: (): any => axios.get(POSTS_URL),
     createPosts: (post: BasePost) => axios.post(POSTS_URL, post),
     deletePost: (id: number) => axios.delete(`${POSTS_URL}${id}/`)
   }

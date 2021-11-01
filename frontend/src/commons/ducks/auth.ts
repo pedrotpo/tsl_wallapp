@@ -1,3 +1,6 @@
+import { AnyAction } from 'redux'
+import { AuthUser } from 'commons/types'
+
 export const INITIAL_STATE = { loading: false, data: {}, error: null }
 
 export const DUCK_NAME = 'auth'
@@ -12,11 +15,11 @@ export const LOGOUT_USER = `${DUCK_NAME}/LOGOUT_USER`
 export const logInUserStarted = () => ({
   type: LOGIN_USER_STARTED
 })
-export const logInUserSucceeded = (data: any) => ({
+export const logInUserSucceeded = (data: AuthUser) => ({
   data,
   type: LOGIN_USER_SUCCEEDED
 })
-export const logInUserFailed = (error: any) => ({
+export const logInUserFailed = (error: string) => ({
   error,
   type: LOGIN_USER_FAILED
 })
@@ -26,7 +29,7 @@ export const logOutUser = () => ({
 })
 
 // Reducer
-export default (state = INITIAL_STATE, action: any) => {
+export default (state = INITIAL_STATE, action: AnyAction) => {
   const data = {
     ...state.data,
     ...action.data

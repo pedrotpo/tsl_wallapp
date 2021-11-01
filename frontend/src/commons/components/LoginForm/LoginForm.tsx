@@ -9,6 +9,7 @@ import {
   InputRightElement,
   FormLabel
 } from '@chakra-ui/react'
+import { BaseUser } from 'commons/types'
 import { useDucks } from 'commons/hooks'
 
 const LoginForm = () => {
@@ -16,7 +17,7 @@ const LoginForm = () => {
   const handleShowPassword = () => setShow(!show)
   const history = useHistory()
   const { logInUser, loadUserProfile } = useDucks()
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: BaseUser) => {
     const id = await logInUser(values)
     await loadUserProfile(id)
     history.push('/')

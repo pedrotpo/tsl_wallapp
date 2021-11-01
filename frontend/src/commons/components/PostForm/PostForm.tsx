@@ -8,7 +8,7 @@ const PostForm = () => {
   const { createPosts, loadPosts } = useDucks()
   const userId = useAppSelector((state) => state.auth.data.user)
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: Record<'content', string>) => {
     await createPosts({ ...values, author_id: userId })
     loadPosts()
   }

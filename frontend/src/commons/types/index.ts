@@ -4,8 +4,9 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 export interface BaseUser {
+  id?: number
   email: string
-  password: string
+  password?: string
 }
 
 export interface UserDetail extends BaseUser {
@@ -29,4 +30,20 @@ export interface JWTToken {
 export interface BasePost {
   content: string
   author_id: number
+}
+
+export interface PostDetail extends BasePost {
+  id: number
+  author: string
+  published: string
+}
+
+export interface AuthUserToken {
+  exp: number
+  iat: number
+}
+export interface AuthUser {
+  user: number
+  access: AuthUserToken
+  refresh: AuthUserToken
 }

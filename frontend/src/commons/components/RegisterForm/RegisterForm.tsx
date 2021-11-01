@@ -9,15 +9,17 @@ import {
   FormLabel
 } from '@chakra-ui/react'
 
-import api from 'commons/api'
+import { useDucks } from 'commons/hooks'
+import { UserDetail } from 'commons/types'
 
 const RegisterForm = () => {
   const [show, setShow] = useState(false)
+  const { createUser } = useDucks()
   const handleShowPassword = () => setShow(!show)
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: UserDetail) => {
     //TODO Insert ducks
-    await api.users.createUser({
+    await createUser({
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,

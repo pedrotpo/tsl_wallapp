@@ -1,3 +1,5 @@
+import { AnyAction } from 'redux'
+import { UserDetail } from 'commons/types'
 export const INITIAL_STATE = { loaded: false, data: {}, error: null }
 
 export const DUCK_NAME = 'user'
@@ -12,11 +14,11 @@ export const CLEAR_USER = `${DUCK_NAME}/CLEAR_USER`
 export const loadUserProfileStarted = () => ({
   type: LOAD_USER_PROFILE_STARTED
 })
-export const loadUserProfileSucceeded = (data: any) => ({
+export const loadUserProfileSucceeded = (data: UserDetail) => ({
   data,
   type: LOAD_USER_PROFILE_SUCCEEDED
 })
-export const loadUserProfileFailed = (error: any) => ({
+export const loadUserProfileFailed = (error: string) => ({
   error,
   type: LOAD_USER_PROFILE_FAILED
 })
@@ -25,7 +27,7 @@ export const clearUser = () => ({
 })
 
 // Reducer
-export default (state = INITIAL_STATE, action: any) => {
+export default (state = INITIAL_STATE, action: AnyAction) => {
   const data = {
     ...state.data,
     ...action.data

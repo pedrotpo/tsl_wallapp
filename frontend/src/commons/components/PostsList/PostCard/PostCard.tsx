@@ -14,8 +14,9 @@ import {
 } from '@chakra-ui/react'
 import { useAppSelector, useDucks } from 'commons/hooks'
 import { Button } from '@chakra-ui/button'
+import { PostDetail } from 'commons/types'
 
-const PostCard = ({ post }: any) => {
+const PostCard = ({ post }: { post: PostDetail }) => {
   const { id, content, author, published, author_id } = post
   const currentUser = useAppSelector((state) => state.user.data)
   const { isOpen, onOpen, onClose } = useDisclosure()
