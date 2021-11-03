@@ -60,7 +60,6 @@
 
 ### Built With
 
-* 
 * [React.js](https://reactjs.org/)
 * [Chakra UI](https://chakra-ui.com/)
 * [Vite](https://vitejs.dev/)
