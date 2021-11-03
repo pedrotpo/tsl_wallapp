@@ -1,6 +1,6 @@
 <div id="top"></div>
 
-[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/pedrotpires/]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -12,11 +12,6 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
-  <a href="https://github.com/pedrotpo/tsl_wallapp">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
 <h3 align="center">The Silver Logic - Full-Stack Assignment - Wall App</h3>
 
   <p align="center">
