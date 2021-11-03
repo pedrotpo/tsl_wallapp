@@ -129,7 +129,7 @@ Project Link: [https://github.com/pedrotpo/tsl_wallapp](https://github.com/pedro
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-This project was possible due to the efforts of many talented coders who wrote many of the tools that were used during development. A special shout out to [https://github.com/joaopaulomoraes](João Paulo Moraes) for the boilerplate used, and to [https://github.com/othneildrew](Othneil Drew) for providing the README template.
+This project was possible due to the efforts of many talented coders who wrote many of the tools that were used during development. A special shout out to [João Paulo Moraes](https://github.com/joaopaulomoraes) for the boilerplate used, and to [Othneil Drew](https://github.com/othneildrew) for providing the README template.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
