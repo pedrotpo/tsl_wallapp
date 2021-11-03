@@ -40,25 +40,29 @@ const PostCard = ({ post }: { post: PostDetail }) => {
         mb="20px"
       >
         <Box mb="10px">
-          <Text>{content}</Text>
+          <Text data-testid="postcard-content">{content}</Text>
         </Box>
         <Flex justifyContent="space-between">
           <Text>
             Posted by:{' '}
-            <Text as="span" color="brandaqua.500">
+            <Text data-testid="postcard-author" as="span" color="brandaqua.500">
               {author}
             </Text>
           </Text>
           <Text>
             Posted on:{' '}
-            <Text as="span" color="brandaqua.500">
+            <Text
+              data-testid="postcard-published"
+              as="span"
+              color="brandaqua.500"
+            >
               {date}
             </Text>
           </Text>
           {currentUser &&
             Object.keys(currentUser).length !== 0 &&
             currentUser.id === author_id && (
-              <Button size="sm" onClick={onOpen}>
+              <Button data-testid="postcard-del-btn" size="sm" onClick={onOpen}>
                 Del?
               </Button>
             )}

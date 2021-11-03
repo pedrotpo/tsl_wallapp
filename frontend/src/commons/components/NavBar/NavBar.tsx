@@ -42,12 +42,14 @@ const NavBar = () => {
       return (
         <>
           <Button
+            data-testid="button-login"
             display={{ base: base, md: md }}
             onClick={() => handleClick('/login/')}
           >
-            Sign In
+            Log In
           </Button>
           <Button
+            data-testid="button-signup"
             display={{ base: base, md: md }}
             variant="solid"
             onClick={() => handleClick('/register/')}
@@ -68,11 +70,13 @@ const NavBar = () => {
             <Text
               minW="150px"
               textAlign="center"
+              data-testid="greeting"
             >{`Hello ${currentUser.first_name}!`}</Text>
           )}
           <Button
             display={{ base: base, md: md }}
             alignSelf="flex-end"
+            data-testid="button-logout"
             onClick={() => handleClick('/logout/')}
           >
             Logout
@@ -111,11 +115,17 @@ const NavBar = () => {
           justify={{ base: 'center', md: 'start' }}
         >
           <RouterLink to="/">
-            <Image src={imgURL} boxSize="50px" alt="logo" />
+            <Image src={imgURL} boxSize="50px" alt="logo" data-testid="logo" />
           </RouterLink>
         </Flex>
         <Box flex={1} textAlign="center" maxW="680px">
-          <Text as="span" fontStyle="italic" fontWeight="700" fontSize="3xl">
+          <Text
+            as="span"
+            fontStyle="italic"
+            fontWeight="700"
+            fontSize="3xl"
+            data-testid="title"
+          >
             THE WALL
           </Text>
         </Box>

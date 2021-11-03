@@ -71,6 +71,7 @@ export const useDucks = () => {
       try {
         const { data }: UserDetail | any = await api.users.getUser(id)
         dispatch(loadUserProfileSucceeded(data))
+        Promise.resolve(data)
       } catch (error: AxiosError | any) {
         dispatch(loadUserProfileFailed(error.message))
         Promise.reject(error)
@@ -97,6 +98,7 @@ export const useDucks = () => {
           }
         }
         dispatch(logInUserSucceeded(decodedData))
+        Promise.resolve(res)
         return decodedData.user
       } catch (error: AxiosError | any) {
         dispatch(logInUserFailed(error.message))
@@ -118,12 +120,8 @@ export const useDucks = () => {
       }
     },
     deletePost: async (id: number) => {
-      try {
-        const res = await api.posts.deletePost(id)
-        Promise.resolve(res)
-      } catch (error: AxiosError | any) {
-        Promise.reject(error)
-      }
+      const res = await api.posts.deletePost(id)
+      Promise.resolve(res)
     }
   }
 }

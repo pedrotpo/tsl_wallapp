@@ -14,10 +14,12 @@ const Footer = () => (
     borderTopColor="brandpurple.500"
     direction="column"
   >
-    <Text color="brandaqua.500">
+    <Text data-testid="first_p" color="brandaqua.500">
       Made with care and Chakra UI, React, Vite and Redux!
     </Text>
-    <Text color="brandaqua.500">By Pedro T. Pires</Text>
+    <Text data-testid="second_p" color="brandaqua.500">
+      By Pedro T. Pires
+    </Text>
   </Flex>
 )
 

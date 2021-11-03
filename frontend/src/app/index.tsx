@@ -10,7 +10,7 @@ import Footer from 'commons/components/Footer'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'commons/constants'
 import { useAppSelector, useAppDispatch, useDucks } from 'commons/hooks'
 import { logInUserSucceeded } from 'commons/ducks/auth'
-import { Decoded } from 'commons/types'
+import { DecodedJWT } from 'commons/types'
 
 const App = () => {
   const authToken = localStorage.getItem(ACCESS_TOKEN) || ''
@@ -22,8 +22,8 @@ const App = () => {
   useEffect(() => {
     const isUserInfoLoaded = userState && Object.keys(userState).length !== 0
     if (authToken && !isUserInfoLoaded) {
-      const access = jwt<Decoded>(authToken)
-      const refresh = jwt<Decoded>(refreshToken)
+      const access = jwt<DecodedJWT>(authToken)
+      const refresh = jwt<DecodedJWT>(refreshToken)
       loadUserProfile(access.user_id)
       const decodedData = {
         user: access.user_id,

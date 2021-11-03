@@ -5,8 +5,7 @@ import {
   UserDetail,
   DecodedJWT,
   JWTToken,
-  BasePost,
-  PostDetail
+  BasePost
 } from 'commons/types'
 import {
   API_URL,
@@ -14,7 +13,6 @@ import {
   REFRESH_TOKEN,
   TOKEN_URL,
   REFRESH_URL,
-  LOGIN_URL,
   USERS_URL,
   POSTS_URL
 } from 'commons/constants'
@@ -39,8 +37,6 @@ axios.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config
 
-    console.log(error.response)
-
     if (
       (error.response.data.code === 'token_not_valid' &&
         error.response.status === 401 &&
@@ -57,7 +53,6 @@ axios.interceptors.response.use(
           return axios
             .post<JWTToken>(REFRESH_URL, { refresh: refreshToken })
             .then((response) => {
-              //TODO Token Type
               localStorage.setItem(ACCESS_TOKEN, response.data.access)
 
               axios.defaults.headers.common[
@@ -69,16 +64,16 @@ axios.interceptors.response.use(
 
               return axios(originalRequest)
             })
-            .catch(() => {
-              window.location.href = LOGIN_URL
+            .catch((error) => {
+              return Promise.reject(error)
             })
         } else {
           //If refresh token is expired, redirect to login screen
-          window.location.href = LOGIN_URL
+          return Promise.reject(error)
         }
       } else {
         //If no refresh token is set, redirect to login screen
-        window.location.href = LOGIN_URL
+        return Promise.reject(error)
       }
     }
     //Other errors should be handled by the duck from which it was called
@@ -86,13 +81,16 @@ axios.interceptors.response.use(
   }
 )
 
+const config = {
+  headers: { Authorization: `JWT ${localStorage.getItem(ACCESS_TOKEN)}` }
+}
+
 export default {
   auth: {
     login: (user: BaseUser) =>
       axios.post<JWTToken>(TOKEN_URL, user).then((res) => {
         localStorage.setItem(ACCESS_TOKEN, res.data.access)
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
-        console.log(res)
         axios.defaults.headers.common[
           'Authorization'
         ] = `JWT ${res.data.access}`
@@ -100,14 +98,16 @@ export default {
       })
   },
   users: {
-    createUser: (user: UserDetail) => axios.post(USERS_URL, user),
-    getUser: (id: number) => axios.get(`${USERS_URL}${id}/`),
+    createUser: (user: UserDetail) => axios.post(USERS_URL, user, config),
+    getUser: (id: number) => {
+      return axios.get(`${USERS_URL}${id}/`, config)
+    },
     updateUser: (id: number, user: UserDetail) =>
-      axios.put(`${USERS_URL}${id}/`, user)
+      axios.put(`${USERS_URL}${id}/`, user, config)
   },
   posts: {
     getPosts: (): any => axios.get(POSTS_URL),
-    createPosts: (post: BasePost) => axios.post(POSTS_URL, post),
-    deletePost: (id: number) => axios.delete(`${POSTS_URL}${id}/`)
+    createPosts: (post: BasePost) => axios.post(POSTS_URL, post, config),
+    deletePost: (id: number) => axios.delete(`${POSTS_URL}${id}/`, config)
   }
 }
